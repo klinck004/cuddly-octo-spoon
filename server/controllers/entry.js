@@ -43,8 +43,10 @@ function bpRating(sys, dia) {
 // Overview of data
 module.exports.DisplayOverview = async (req, res, next) => {
     try {
-        
-        let current = d.toLocaleDateString();
+        let day = d.getDate();
+        let month = d.getMonth();
+        let year = d.getFullYear();
+        let current = year + "-" + day + "-" + month;
         console.log(current);
         const EntryList = await Entry.find({"date": current }).sort({datetime: "desc"}); // Sort by time -- latest first
         let sysEntries = [];
