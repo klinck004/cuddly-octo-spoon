@@ -129,7 +129,7 @@ module.exports.ProcessAddEntry = async (req, res, next) => {
     time = dateTime[1]
     ampm = dateTime[2]
     rating = bpRating(req.body.sys, req.body.dia)
-    
+
     let newEntry = Entry({
         "datetime": req.body.date,
         "date": date,
@@ -181,17 +181,20 @@ module.exports.EditEntry = async (req, res, next) => {
 module.exports.ProcessEditEntry = (req, res, next) => {
     try {
         const id = req.params.id;
-        let updatedEntry = Entry({
-            "_id": id,
-            "sys": req.body.sys,
-            "dia": req.body.dia,
-            "pulse": req.body.pulse,
-            "leftArm": req.body.leftArm,
-            "rightArm": req.body.rightArm,
-            "notes": req.body.notes
-        });
-        console.log(updatedEntry)
-        Entry.findByIdAndUpdate(id, updatedEntry).then(() => {
+        let editObj = {"_id": id,};
+        if (req.body.sys != "") {
+            editObj.sys = req.body.sys
+        }
+        if (req.body.dia != "") {
+            editObj.dia = req.body.dia
+        }
+        if (req.body.pulse != "") {
+            editObj.pulse = req.body.pulse
+        }
+        if (req.body.notes != "") {
+            editObj.notes = req.body.notes
+        }
+        Entry.findByIdAndUpdate(id, editObj).then(() => {
             res.redirect('/bp')
         });
     }
