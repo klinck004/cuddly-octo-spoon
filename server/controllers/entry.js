@@ -44,9 +44,16 @@ function bpRating(sys, dia) {
 module.exports.DisplayOverview = async (req, res, next) => {
     try {
         let day = d.getDate();
-        let month = d.getMonth();
+        let month = d.getMonth() + 1;
+        if (day < 10) {
+            day = '0' + day;
+        }
+        
+        if (month < 10) {
+            month = `0${month}`;
+        }
         let year = d.getFullYear();
-        let current = year + "-" + day + "-" + month;
+        let current = year + "-" + month + "-" + day;
         console.log(current);
         const EntryList = await Entry.find({"date": current }).sort({datetime: "desc"}); // Sort by time -- latest first
         let sysEntries = [];
