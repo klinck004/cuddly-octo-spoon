@@ -1,0 +1,40 @@
+<div class="d-flex">
+    <div class="p-2 align-self-center flex-grow-1">
+        <h2>Today's readings:</h2>
+    </div>
+    <div class="p-2 align-self-center">
+        <p>Last reading at <%= EntryList[0].time %>: <h3 class="text-center">
+                    <%= EntryList[0].sys %>/<%= EntryList[0].dia %>
+                </h3>
+        </p>
+        <% if (EntryList[0].rating=="High" ) { %>
+            <div class="rounded bg-danger-subtle text-center" role="alert">High</div>
+            <%} else if (EntryList[0].rating=="Medium" ) { %>
+                <div class="rounded bg-warning text-center" role="alert">Moderate</div>
+                <%} else if (EntryList[0].rating=="Elevated" ) { %>
+                    <div class="rounded bg-warning-subtle text-center" role="alert">Elevated</div>
+                    <%} else if (EntryList[0].rating=="Normal" ) { %>
+                        <div class="rounded bg-success-subtle text-center" role="alert">Normal</div>
+                        <%} else { %>
+
+                            <% } %>
+    </div>
+    <div class="p-2 align-self-center">
+        <p>Average blood pressure:
+        <h3 class="text-center">
+            <%= avgBP[0] %> / <%= avgBP[1] %>
+        </h3>
+        </p>
+        <% if (avgRating=="High" ) { %>
+            <div class="rounded bg-danger-subtle text-center" role="alert">High</div>
+            <%} else if (avgRating=="Medium" ) { %>
+                <div class="rounded bg-warning text-center" role="alert">Moderate</div>
+                <%} else if (avgRating=="Elevated" ) { %>
+                    <div class="rounded bg-warning-subtle text-center" role="alert">Elevated</div>
+                    <%} else if (avgRating=="Normal" ) { %>
+                        <div class="rounded bg-success-subtle text-center" role="alert">Normal</div>
+                        <%} else { %>
+
+                            <% } %>
+    </div>
+</div>

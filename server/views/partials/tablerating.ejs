@@ -1,0 +1,23 @@
+<% if (EntryList[count].rating == "High") { %>
+    <div class="alert alert-danger" role="alert">
+        <p>Your average blood pressure today is <strong>high:</strong></p> 
+        <p><%= avgBP[0] %> / <%= avgBP[1] %></p>
+    </div>     
+<%} else if (EntryList[count].rating == "Medium") { %>
+    <div class="alert alert-warning" role="alert">
+        <p>Your average blood pressure today is <strong>moderately high:</strong></p> 
+        <p><%= avgBP[0] %> / <%= avgBP[1] %></p>
+    </div>     
+<%} else if (EntryList[count].rating == "Elevated") { %>
+    <div class="alert alert-secondary" role="alert">
+        <p>Your average blood pressure today is <strong>elevated:</strong></p> 
+        <p><%= avgBP[0] %> / <%= avgBP[1] %></p>
+    </div>   
+<%} else if (EntryList[count].rating == "Normal") { %>
+    <div class="alert alert-success" role="alert">
+        <p>Your average blood pressure today is <strong>normal:</strong></p> 
+        <p><%= avgBP[0] %> / <%= avgBP[1] %></p>
+    </div>    
+<%} else { %>
+  
+<% } %>
