@@ -2,7 +2,6 @@ var express = require('express');
 let Entry = require('../models/entry');
 console.log("BP entry controller loaded!"); /* for dev peace of mind */
 
-const d = new Date();
 function time12(dateTime) {
     date = dateTime.substring(0, dateTime.indexOf("T"));
     inputTime = dateTime.substring(dateTime.indexOf("T") + 1);
@@ -43,6 +42,7 @@ function bpRating(sys, dia) {
 // Overview of data
 module.exports.DisplayOverview = async (req, res, next) => {
     try {
+        const d = new Date();
         let day = d.getDate();
         let month = d.getMonth() + 1;
         if (day < 10) {
@@ -87,6 +87,7 @@ module.exports.DisplayOverview = async (req, res, next) => {
 // Read list
 module.exports.DisplayEntries = async (req, res, next) => {
     try {
+        const d = new Date();
         const startOfMonth = new Date(d.getFullYear(), d.getMonth(), 1);
         const endOfMonth = new Date(d.getFullYear(), d.getMonth() + 1, 1);
         const EntryList = await Entry.find({ datetime: { $gte: startOfMonth, $lt: endOfMonth } }).sort({date: "desc"}).exec();
