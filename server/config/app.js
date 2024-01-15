@@ -1,5 +1,8 @@
 // General dependencies
 require('dotenv').config()
+if (process.env.NODE_ENV === 'development') {
+  console.log("In development mode")
+}
 var createError = require('http-errors');
 var asyncErr = require('express-async-errors');
 var express = require('express');
@@ -73,6 +76,15 @@ app.use(function(req, res, next) {
 });
 
 
+const devMode = (req, res, next) => {
+  if (process.env.NODE_ENV === 'development') {
+    res.locals.devMode = true;
+  } else {
+    res.locals.devMode = false;
+  }
+  next();
+};
+app.use(devMode);
 
 // error handler
 app.use(function(err, req, res, next) {

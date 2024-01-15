@@ -1,7 +1,7 @@
-var express = require('express');
 let Entry = require('../models/entry');
 console.log("BP entry controller loaded!"); /* for dev peace of mind */
 
+// Separate date and time and convert into string and 12hr time
 function time12(dateTime) {
     date = dateTime.substring(0, dateTime.indexOf("T"));
     inputTime = dateTime.substring(dateTime.indexOf("T") + 1);
@@ -9,15 +9,36 @@ function time12(dateTime) {
     min = inputTime.substring(inputTime.indexOf(":") + 1);
     let AmPm = hour >= 12 ? 'pm' : 'am';
     hour = (hour % 12) || 12;
-    finalTime = (hour +":"+ min + AmPm);
+    finalTime = (hour + ":" + min + AmPm);
     return [date, finalTime, AmPm]
 }
 
+// Convert date into ET so that entries do not disappear 5 hours before end of day
+function etConv(d) {
+    easternTime = new Intl.DateTimeFormat('en-US', {
+        timeZone: "America/New_York"
+    });
+    d = easternTime.format(d)
+    let timestamp = Date.parse(d);
+    let dateObject = new Date(timestamp);
+    let day = dateObject.getDate();
+    let month = dateObject.getMonth() + 1;
+    if (day < 10) {
+        day = '0' + day;
+    }
+
+    if (month < 10) {
+        month = `0${month}`;
+    }
+    let year = dateObject.getFullYear();
+    let current = year + "-" + month + "-" + day;
+    return current
+}
 function calculateAverage(array) {
     var total = 0;
     var count = 0;
 
-    array.forEach(function(item, index) {
+    array.forEach(function (item, index) {
         total += item;
         count++;
     });
@@ -42,28 +63,17 @@ function bpRating(sys, dia) {
 // Overview of data
 module.exports.DisplayOverview = async (req, res, next) => {
     try {
-        const d = new Date();
-        let day = d.getDate();
-        let month = d.getMonth() + 1;
-        if (day < 10) {
-            day = '0' + day;
-        }
-        
-        if (month < 10) {
-            month = `0${month}`;
-        }
-        let year = d.getFullYear();
-        let current = year + "-" + month + "-" + day;
-        console.log(current);
-        const EntryList = await Entry.find({"date": current }).sort({datetime: "desc"}); // Sort by time -- latest first
+        let d = new Date();
+        current = etConv(d)
+        console.log("Server date: " + current);
+        const EntryList = await Entry.find({ "date": current }).sort({ datetime: "desc" }); // Sort by time -- latest first
         let sysEntries = [];
         let diaEntries = [];
-        for(let count=0;count<EntryList.length;count++) {
+        for (let count = 0; count < EntryList.length; count++) {
             sysEntries.push(EntryList[count].sys);
             diaEntries.push(EntryList[count].dia);
         }
         let avgBP = [Math.round(calculateAverage(sysEntries)), Math.round(calculateAverage(diaEntries))]
-        
         // Render page
         res.render('bp/overview', {
             title: 'Blood Pressure Overview for ' + req.user.displayName,
@@ -72,7 +82,8 @@ module.exports.DisplayOverview = async (req, res, next) => {
             displayName: req.user ? req.user.displayName : '',
             avgRating: bpRating(avgBP[0], avgBP[1]),
             sysEntries: sysEntries,
-            diaEntries: diaEntries
+            diaEntries: diaEntries,
+            dev: res.locals.devMode
         })
     } catch (err) {
         console.error(err);
@@ -80,7 +91,7 @@ module.exports.DisplayOverview = async (req, res, next) => {
         res.render('bp/overview', {
             error: 'Error on server'
         });
-        
+                      
     }
 };
 
@@ -90,7 +101,7 @@ module.exports.DisplayEntries = async (req, res, next) => {
         const d = new Date();
         const startOfMonth = new Date(d.getFullYear(), d.getMonth(), 1);
         const endOfMonth = new Date(d.getFullYear(), d.getMonth() + 1, 1);
-        const EntryList = await Entry.find({ datetime: { $gte: startOfMonth, $lt: endOfMonth } }).sort({date: "desc"}).exec();
+        const EntryList = await Entry.find({ datetime: { $gte: startOfMonth, $lt: endOfMonth } }).sort({ date: "desc" }).exec();
         // const EntryList = await Entry.find().sort({date: "desc"}); // Sort by date
         res.render('bp/list', {
             title: 'Blood Pressure Entries for ' + req.user.displayName,
@@ -182,7 +193,7 @@ module.exports.EditEntry = async (req, res, next) => {
 module.exports.ProcessEditEntry = (req, res, next) => {
     try {
         const id = req.params.id;
-        let editObj = {"_id": id,};
+        let editObj = { "_id": id, };
         if (req.body.sys != "") {
             editObj.sys = req.body.sys
         }

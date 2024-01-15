@@ -31,12 +31,14 @@
 </head>
 
 <body onLoad="updateDateTime()">
+  <% if (dev === true ) { %>
+    <p>Development</p>
+  <%} %>
+
 <%- include('../partials/nav.ejs') %>
   <% if (EntryList [0] == undefined ) { %>
     <!--No entries--><%- include('../partials/empty.ejs') %>
   <%} else { %>
-    
-  
   <main class="container pt-2">
     <div>
       <!--Reading--><%- include('../partials/normal.ejs') %>
