@@ -9,7 +9,7 @@ let entryModel = new mongoose.Schema({
     dia: Number,
     pulse: Number,
     rating: String,
-    rightArm: String,
+    leftArm: String,
     notes: String
 },
     {
