@@ -9,9 +9,11 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+let cors = require('cors'
+)
 var indexRouter = require('../routes/index');
 let entryRouter = require('../routes/entry');
+let apiRouter = require('../routes/api')
 
 /* Authentication dependencies */
 let session = require('express-session');
@@ -35,6 +37,7 @@ var app = express();
 
 // Further auth setup
 // Session setup
+app.use(cors({origin: 'http://localhost:4200'}));
 app.use(session({
   secret:"SomeSecret",
   saveUninitialized:false,
@@ -69,6 +72,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/bp', entryRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

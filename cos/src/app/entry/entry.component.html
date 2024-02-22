@@ -1,0 +1,50 @@
+<p>entry works!</p>
+
+<form [formGroup]="entryForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="datetime">
+          Datetime
+        </label>
+        <input id="datetime" type="text" formControlName="datetime">
+      </div>
+      <div>
+        <label for="sys">
+          Sys
+        </label>
+        <input id="sys" type="text" formControlName="sys">
+      </div>    
+      <div>
+        <label for="dia">
+          Dia
+        </label>
+        <input id="dia" type="text" formControlName="dia">
+      </div>    
+      <div>
+        <label for="pulse">
+          Pulse
+        </label>
+        <input id="pulse" type="text" formControlName="pulse">
+      </div>    
+      <div>
+        <label for="leftArm">
+          leftArm
+        </label>
+        <input id="leftArm" type="text" formControlName="leftArm">
+      </div>    
+      <div>
+        <label for="rightArm">
+          rightArm
+        </label>
+        <input id="rightArm" type="text" formControlName="rightArm">
+      </div>    
+      <div>
+        <label for="notes">
+          Notes
+        </label>
+        <input id="notes" type="text" formControlName="notes">
+      </div>    
+
+
+    <button class="button" type="submit">Purchase</button>
+  
+</form>
